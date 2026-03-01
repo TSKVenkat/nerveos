@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4c6ef5"/>
+      <stop offset="100%" style="stop-color:#748ffc"/>
+    </linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="45" fill="url(#g)" opacity="0.15"/>
+  <circle cx="50" cy="50" r="8" fill="#5c7cfa"/>
+  <line x1="50" y1="50" x2="25" y2="25" stroke="#748ffc" stroke-width="2"/>
+  <circle cx="25" cy="25" r="5" fill="#748ffc"/>
+  <line x1="50" y1="50" x2="75" y2="25" stroke="#748ffc" stroke-width="2"/>
+  <circle cx="75" cy="25" r="5" fill="#748ffc"/>
+  <line x1="50" y1="50" x2="25" y2="75" stroke="#748ffc" stroke-width="2"/>
+  <circle cx="25" cy="75" r="5" fill="#748ffc"/>
+  <line x1="50" y1="50" x2="75" y2="75" stroke="#748ffc" stroke-width="2"/>
+  <circle cx="75" cy="75" r="5" fill="#748ffc"/>
+  <line x1="50" y1="50" x2="50" y2="15" stroke="#5c7cfa" stroke-width="2"/>
+  <circle cx="50" cy="15" r="4" fill="#5c7cfa"/>
+  <line x1="50" y1="50" x2="85" y2="50" stroke="#5c7cfa" stroke-width="2"/>
+  <circle cx="85" cy="50" r="4" fill="#5c7cfa"/>
+</svg>

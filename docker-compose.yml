@@ -1,0 +1,91 @@
+# ============================================================
+#  NerveOS — Docker Compose (full self-hosted stack)
+# ============================================================
+#
+# Services:
+#   - backend   : FastAPI (Python) — port 8000
+#   - frontend  : React + Nginx    — port 3000
+#   - searxng   : Private search   — port 8888
+#   - redis     : Cache / task queue
+#   - ollama    : Local LLM        — port 11434
+#
+# Usage:
+#   docker compose up -d
+#   docker compose exec ollama ollama pull llama3.2
+#
+# ============================================================
+
+version: "3.9"
+
+services:
+  # ── Backend API ────────────────────────────────────
+  backend:
+    build: ./backend
+    container_name: nerveos-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite+aiosqlite:///./nerveos.db
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_MODEL=llama3.2
+      - SEARXNG_URL=http://searxng:8888
+      - REDIS_URL=redis://redis:6379/0
+      - DEBUG=true
+    volumes:
+      - backend-data:/app/data
+    depends_on:
+      - redis
+      - searxng
+    restart: unless-stopped
+
+  # ── Frontend Dashboard ─────────────────────────────
+  frontend:
+    build: ./frontend
+    container_name: nerveos-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # ── SearXNG (Private Search) ───────────────────────
+  searxng:
+    image: searxng/searxng:latest
+    container_name: nerveos-searxng
+    ports:
+      - "8888:8080"
+    volumes:
+      - ./searxng/settings.yml:/etc/searxng/settings.yml:ro
+    environment:
+      - SEARXNG_BASE_URL=http://localhost:8888/
+    restart: unless-stopped
+
+  # ── Redis ──────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: nerveos-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  # ── Ollama (Local LLM) ────────────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    container_name: nerveos-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    restart: unless-stopped
+    # Uncomment for GPU support:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+volumes:
+  backend-data:
+  ollama-data:

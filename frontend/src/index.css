@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-950 text-gray-100 antialiased;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-900;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-700 rounded-full;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-gray-900 border border-gray-800 rounded-xl p-5 transition-all duration-200;
+  }
+  .card:hover {
+    @apply border-gray-700;
+  }
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  .badge-info { @apply bg-blue-500/10 text-blue-400; }
+  .badge-warning { @apply bg-amber-500/10 text-amber-400; }
+  .badge-critical { @apply bg-red-500/10 text-red-400; }
+  .badge-success { @apply bg-emerald-500/10 text-emerald-400; }
+  
+  .btn {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150;
+  }
+  .btn-primary {
+    @apply bg-nerve-600 hover:bg-nerve-700 text-white;
+  }
+  .btn-secondary {
+    @apply bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700;
+  }
+  .btn-danger {
+    @apply bg-red-600/10 hover:bg-red-600/20 text-red-400 border border-red-800;
+  }
+  .btn-success {
+    @apply bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-400 border border-emerald-800;
+  }
+}
