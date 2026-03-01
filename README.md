@@ -1,101 +1,98 @@
-<div align="center">
+# NerveOS
 
-# 🧠 NerveOS
+**AI-Native Business Operating System**
 
-### AI-Native Business Operating System
-
-*Continuously watches your market, inbox, and metrics — then drafts the decisions for you.*
+NerveOS is an open-source, self-hostable business intelligence platform for SMBs and scale-ups. Autonomous agents continuously monitor market signals, communications, and operational metrics, then surface recommended actions through a human-in-the-loop approval workflow.
 
 [![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://python.org)
 [![React](https://img.shields.io/badge/React-18-61dafb.svg)](https://react.dev)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688.svg)](https://fastapi.tiangolo.com)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Self-Hosted](https://img.shields.io/badge/Self--Hosted-✓-purple.svg)](#deployment)
-
-</div>
+[![Self-Hosted](https://img.shields.io/badge/Self--Hosted-Yes-purple.svg)](#deployment)
 
 ---
 
-## 🎯 Problem
+## Problem Statement
 
-Growing businesses lack an AI-native **"business nervous system"** that continuously watches their market, customers, and operations and recommends/reviews actions. Instead, they rely on **15+ fragmented apps** and manual coordination.
+Growing businesses lack an AI-native system that continuously monitors their market, customers, and operations while recommending and reviewing actions. In practice, founders and operators rely on fifteen or more fragmented tools for market intelligence, email, CRM, reporting, and automation — with no AI layer that understands the business end-to-end. Competitor moves, customer signals, and financial health are visible in isolation but are never connected or acted upon systematically.
 
-> Founders and CXOs juggle separate tools for market intel, email, CRM, reporting, and automation — with no AI layer that understands the business end-to-end. Competitor moves, customer signals, and financial health are **visible but not acted on**.
+## Solution
 
-## 💡 Solution
-
-NerveOS is an **AI-powered Business OS for SMBs** that unifies market intelligence, communications, and operations into one reviewable **command center**, where autonomous agents monitor signals, propose actions, and execute **only with human-approved guardrails**.
+NerveOS unifies market intelligence, communications, and operations into a single reviewable command center. Autonomous agents monitor signals, propose actions, and execute only with explicit human approval — enforced by a configurable policy and guardrails engine.
 
 ---
 
-## ✨ Features
+## Features
 
-### 1. 📡 Market & Competitor Pulse Agent
-- **Google Trends** tracking for competitors and keywords
-- **RSS/News** aggregation from 10+ sources
-- **SearXNG** privacy-friendly web search (offline capable)
-- **Stock/Financial** data via yfinance (prices, market cap, PE ratio)
-- **Anomaly detection** — price swings, volume spikes
-- **AI-generated** competitor analysis and digest
-- **Suggested response actions** for each competitive move
+### Market and Competitor Intelligence Agent
 
-### 2. 📧 Inbox & Follow-up Agent
-- **IMAP/SMTP** integration for any email provider
-- **AI classification** — lead, renewal risk, complaint, partnership, spam
-- **Priority scoring** — urgent, high, medium, low
-- **Multi-tone draft replies** — professional, friendly, concise
-- **Human-in-the-loop** — approve/reject before sending
-- **Follow-up tracking** — alerts for unanswered emails
-- **Built-in CRM** — contacts, deal stages, pipeline
+- Google Trends tracking for competitors and target keywords
+- RSS and news aggregation from multiple sources
+- SearXNG private web search (self-hosted, offline-capable)
+- Stock and financial data via yfinance (price, market cap, P/E ratio)
+- Anomaly detection for price swings and volume spikes
+- AI-generated competitor analysis and weekly digest
+- Suggested response actions for each competitive development
 
-### 3. 📊 Executive Cockpit
-- **Unified KPI dashboard** — MRR, churn, leads, NPS, support tickets
-- **Sales pipeline** visualization with deal stages
-- **Natural language queries** — *"How did sales compare to last quarter?"*
-- **Metric anomaly detection** — automated alerts on 15%+ deviations
-- **Morning Briefing** — one-click AI summary of everything important
+### Inbox and Follow-up Agent
 
-### 4. 🛡️ Guardrails & Policy Engine
-- **Human-in-the-loop by default** — every action goes through approval queue
-- **Custom policy rules** — block, require approval, or auto-approve by conditions
-- **Deal value protection** — high-value changes require manager approval
-- **Complete audit trail** — who suggested, who approved, what happened
-- **Privacy-first** — self-hostable, local LLM, private search
+- IMAP/SMTP integration for any email provider
+- AI classification: lead, renewal risk, complaint, partnership, spam
+- Priority scoring: urgent, high, medium, low
+- Multi-tone draft replies: professional, friendly, concise
+- Human-in-the-loop approval before any message is sent
+- Follow-up tracking with alerts for unanswered threads
+- Built-in contact and deal stage management
+
+### Executive Cockpit
+
+- Unified KPI dashboard covering MRR, churn, leads, NPS, and support volume
+- Sales pipeline visualization with deal stage breakdown
+- Natural language query interface ("How did sales compare to last quarter?")
+- Metric anomaly detection with automated alerts on significant deviations
+- One-click morning briefing summarizing all overnight developments
+
+### Guardrails and Policy Engine
+
+- Human-in-the-loop approval queue for every proposed action
+- Configurable policy rules: block, require approval, or auto-approve by condition
+- Deal value thresholds requiring manager-level approval
+- Complete audit trail: suggested by, approved by, outcome, timestamp
+- Privacy-first architecture: fully self-hostable with private search
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                    NerveOS Frontend                       │
-│              React + TailwindCSS + Recharts               │
-├─────────────────────────────────────────────────────────┤
-│                      FastAPI Backend                      │
-│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌────────────┐  │
-│  │  Market   │ │  Email   │ │Executive │ │  Guardrails │  │
-│  │  Intel    │ │  Agent   │ │ Cockpit  │ │  & Policy   │  │
-│  │  Agent    │ │          │ │  Agent   │ │  Engine     │  │
-│  └─────┬────┘ └────┬─────┘ └────┬─────┘ └──────┬─────┘  │
-│        │           │            │               │         │
-│  ┌─────┴───────────┴────────────┴───────────────┴─────┐  │
-│  │              Agent Orchestrator                      │  │
-│  └─────────────────────┬───────────────────────────────┘  │
-├────────────────────────┼──────────────────────────────────┤
-│  Services Layer        │                                  │
-│  ┌─────┐ ┌──────┐ ┌───┴──┐ ┌───────┐ ┌──────┐ ┌──────┐ │
-│  │Trend│ │ News │ │  LLM │ │SearXNG│ │Email │ │FinAPI│ │
-│  │  s  │ │ RSS  │ │Ollama│ │Search │ │IMAP/ │ │yfinc │ │
-│  │     │ │      │ │OpenAI│ │       │ │SMTP  │ │      │ │
-│  └─────┘ └──────┘ └──────┘ └───────┘ └──────┘ └──────┘ │
-├─────────────────────────────────────────────────────────┤
-│  SQLite/PostgreSQL  │  Redis  │  Ollama  │  SearXNG     │
-└─────────────────────────────────────────────────────────┘
++----------------------------------------------------------+
+|                     NerveOS Frontend                     |
+|               React + TailwindCSS + Recharts             |
++----------------------------------------------------------+
+|                      FastAPI Backend                     |
+|  +-----------+ +-----------+ +----------+ +----------+  |
+|  |  Market   | |  Email    | |Executive | |Guardrails|  |
+|  |  Intel    | |  Agent    | |  Cockpit | |  Policy  |  |
+|  |  Agent    | |           | |  Agent   | |  Engine  |  |
+|  +-----+-----+ +-----+-----+ +----+-----+ +----+-----+  |
+|        |             |            |             |        |
+|  +-----+-------------+------------+-------------+-----+  |
+|  |                 Agent Orchestrator                  |  |
+|  +-----------------------------------------------------+  |
++----------------------------------------------------------+
+|  Services                                                |
+|  +-------+ +------+ +-------+ +--------+ +----+ +----+ |
+|  |Trends | | News | |  LLM  | |SearXNG | |IMAP| |Fin | |
+|  |       | | RSS  | | Grok  | | Search | |SMTP| |API | |
+|  +-------+ +------+ +-------+ +--------+ +----+ +----+ |
++----------------------------------------------------------+
+|  SQLite / PostgreSQL  |  Redis  |  SearXNG               |
++----------------------------------------------------------+
 ```
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Option 1: Docker Compose (Recommended)
 
@@ -103,154 +100,166 @@ NerveOS is an **AI-powered Business OS for SMBs** that unifies market intelligen
 git clone https://github.com/your-org/nerveos.git
 cd nerveos
 cp .env.example .env
+# Edit .env and set OPENROUTER_API_KEY and email credentials
 
-# Start all services
 docker compose up -d
-
-# Pull the LLM model (first time only)
-docker compose exec ollama ollama pull llama3.2
-
-# Open dashboard
-open http://localhost:3000
 ```
+
+The dashboard will be available at `http://localhost:3000`.
+The API and interactive documentation will be available at `http://localhost:8000/docs`.
 
 ### Option 2: Local Development
 
-**Backend:**
+**Backend**
+
 ```bash
 cd backend
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-
-# Start the API server
-python main.py
-# → API at http://localhost:8000
-# → Docs at http://localhost:8000/docs
+uvicorn main:app --reload --port 8000
 ```
 
-**Frontend:**
+**Frontend**
+
 ```bash
 cd frontend
 npm install
 npm run dev
-# → Dashboard at http://localhost:3000
 ```
 
-**Dependencies (optional):**
-```bash
-# Local LLM
-curl -fsSL https://ollama.com/install.sh | sh
-ollama pull llama3.2
+**SearXNG (optional)**
 
-# Private search
+```bash
 docker run -d -p 8888:8080 searxng/searxng
 ```
 
 ---
 
-## 📡 API Endpoints
+## Environment Variables
+
+Copy `.env.example` to `.env` and configure the following:
+
+| Variable | Description |
+|---|---|
+| `OPENROUTER_API_KEY` | API key from [openrouter.ai](https://openrouter.ai) |
+| `OPENROUTER_MODEL` | Model identifier (default: `x-ai/grok-3-mini-beta`) |
+| `OPENROUTER_BASE_URL` | OpenRouter API base URL |
+| `IMAP_HOST` / `IMAP_USER` / `IMAP_PASSWORD` | Incoming mail credentials |
+| `SMTP_HOST` / `SMTP_USER` / `SMTP_PASSWORD` | Outgoing mail credentials |
+| `SEARXNG_URL` | SearXNG instance URL |
+| `DATABASE_URL` | SQLite or PostgreSQL connection string |
+| `SECRET_KEY` | Application secret key (change in production) |
+
+---
+
+## API Reference
 
 | Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/dashboard/` | GET | Full executive dashboard |
+|---|---|---|
+| `/api/dashboard/` | GET | Full executive dashboard data |
 | `/api/dashboard/briefing` | POST | Generate morning briefing |
 | `/api/dashboard/ask` | POST | Natural language business query |
 | `/api/dashboard/metrics` | POST | Record a business metric |
-| `/api/market/competitors` | GET/POST | CRUD competitors |
-| `/api/market/scan` | POST | Run full market intel scan |
-| `/api/market/digest` | GET | AI-generated intel digest |
-| `/api/market/search` | GET | Quick multi-source search |
+| `/api/market/competitors` | GET, POST | Manage competitor records |
+| `/api/market/scan` | POST | Run full market intelligence scan |
+| `/api/market/digest` | GET | AI-generated intelligence digest |
+| `/api/market/search` | GET | Multi-source search |
 | `/api/market/trends` | GET | Google Trends data |
-| `/api/market/finance/{ticker}` | GET | Stock info |
+| `/api/market/finance/{ticker}` | GET | Stock and financial data |
 | `/api/email/inbox` | GET | AI-classified inbox |
 | `/api/email/inbox/{id}/draft` | POST | Generate reply drafts |
-| `/api/email/drafts/{id}/approve` | POST | Approve & send draft |
-| `/api/email/contacts` | GET/POST | CRM contacts |
+| `/api/email/drafts/{id}/approve` | POST | Approve and send a draft |
+| `/api/email/contacts` | GET, POST | CRM contact management |
 | `/api/actions/pending` | GET | Pending approval queue |
 | `/api/actions/{id}/approve` | POST | Approve an action |
 | `/api/actions/audit` | GET | Full audit trail |
-| `/api/actions/policies` | GET/POST | Manage policy rules |
+| `/api/actions/policies` | GET, POST | Manage policy rules |
 
-Full interactive docs at **`/docs`** (Swagger UI).
+Full interactive documentation is available at `/docs` (Swagger UI).
 
 ---
 
-## 🔧 Tech Stack (100% Open Source)
+## Technology Stack
+
+All components are open source.
 
 | Layer | Technology |
-|-------|-----------|
-| **Backend** | Python 3.11, FastAPI, SQLAlchemy, Pydantic |
-| **Frontend** | React 18, Vite, TailwindCSS, Recharts, Lucide |
-| **LLM** | Ollama (local) — llama3.2, mistral, etc. |
-| **Search** | SearXNG (self-hosted, privacy-first) |
-| **Database** | SQLite (dev) / PostgreSQL (prod) |
-| **Cache** | Redis |
-| **Trends** | pytrends (Google Trends) |
-| **Finance** | yfinance (stock data) |
-| **News** | feedparser (RSS/Atom) |
-| **Email** | IMAP/SMTP (native Python) |
-| **Deploy** | Docker, Docker Compose |
+|---|---|
+| Backend | Python 3.11, FastAPI, SQLAlchemy, Pydantic |
+| Frontend | React 18, Vite, TailwindCSS, Recharts, Lucide |
+| LLM | Grok via OpenRouter (`x-ai/grok-3-mini-beta`) |
+| Search | SearXNG (self-hosted, privacy-first) |
+| Database | SQLite (development) / PostgreSQL (production) |
+| Cache | Redis |
+| Trends | pytrends (Google Trends API) |
+| Finance | yfinance (stock and market data) |
+| News | feedparser (RSS/Atom aggregation) |
+| Email | IMAP/SMTP (standard Python libraries) |
+| Deployment | Docker, Docker Compose |
 
 ---
 
-## 🗺️ Roadmap
+## Roadmap
 
-- [x] Market & Competitor Pulse Agent
-- [x] Email Agent with AI classification
-- [x] Executive Cockpit with NL queries
-- [x] Human-in-the-loop guardrails
-- [x] Policy engine & audit trail
-- [x] Docker self-hosting
-- [ ] IPO alerts & stock crash early-warning
-- [ ] Slack/Teams integrations
-- [ ] Asset valuation monitoring
-- [ ] Internal knowledge hub
-- [ ] Multi-tenant cloud version
-- [ ] Plugin framework for custom agents
-- [ ] Stripe/billing integration
-- [ ] Advanced charting & reporting
-- [ ] Mobile-responsive PWA
+**Completed**
+- Market and Competitor Intelligence Agent
+- Email Agent with AI classification and draft replies
+- Executive Cockpit with natural language query support
+- Human-in-the-loop guardrails and approval workflow
+- Policy engine and full audit trail
+- Docker self-hosting
+
+**Planned**
+- IPO alerts and stock crash early-warning signals
+- Slack and Microsoft Teams integrations
+- Asset valuation monitoring
+- Internal knowledge hub
+- Multi-tenant cloud deployment option
+- Plugin framework for custom agents
+- Stripe and billing integration
+- Advanced reporting and chart exports
+- Mobile-responsive progressive web app
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 nerveos/
-├── docker-compose.yml          # Full stack orchestration
-├── .env.example                # Environment config template
+├── docker-compose.yml              # Full stack orchestration
+├── .env.example                    # Environment configuration template
 ├── backend/
-│   ├── main.py                 # FastAPI app + seed data
-│   ├── config.py               # Settings from env vars
-│   ├── database.py             # Async SQLAlchemy setup
+│   ├── main.py                     # FastAPI application entry point
+│   ├── config.py                   # Settings loaded from environment
+│   ├── database.py                 # Async SQLAlchemy configuration
 │   ├── models/
-│   │   └── models.py           # All database models
+│   │   └── models.py               # Database models
 │   ├── agents/
-│   │   ├── market_intel.py     # Market intelligence agent
-│   │   ├── email_agent.py      # Email triage & reply agent
-│   │   ├── executive_cockpit.py# Dashboard & NL query agent
-│   │   └── orchestrator.py     # Multi-agent coordinator
+│   │   ├── market_intel.py         # Market intelligence agent
+│   │   ├── email_agent.py          # Email triage and reply agent
+│   │   ├── executive_cockpit.py    # Dashboard and NL query agent
+│   │   └── orchestrator.py        # Multi-agent coordinator
 │   ├── services/
-│   │   ├── llm.py              # Ollama + OpenAI LLM service
-│   │   ├── searxng.py          # SearXNG search integration
-│   │   ├── trends.py           # Google Trends via pytrends
-│   │   ├── news.py             # RSS/news aggregation
-│   │   ├── finance.py          # Stock data via yfinance
-│   │   └── email_service.py    # IMAP/SMTP service
+│   │   ├── llm.py                  # Grok via OpenRouter (LLM client)
+│   │   ├── searxng.py              # SearXNG search integration
+│   │   ├── trends.py               # Google Trends via pytrends
+│   │   ├── news.py                 # RSS and news aggregation
+│   │   ├── finance.py              # Stock data via yfinance
+│   │   └── email_service.py        # IMAP/SMTP service
 │   ├── guardrails/
-│   │   └── policy_engine.py    # Approval & audit system
+│   │   └── policy_engine.py        # Approval workflow and audit system
 │   └── routers/
-│       ├── market.py           # Market intel API
-│       ├── email.py            # Email agent API
-│       ├── dashboard.py        # Dashboard API
-│       ├── actions.py          # Actions & policies API
-│       └── settings.py         # Health & config API
+│       ├── market.py               # Market intelligence endpoints
+│       ├── email.py                # Email agent endpoints
+│       ├── dashboard.py            # Dashboard endpoints
+│       ├── actions.py              # Actions and policies endpoints
+│       └── settings.py             # Health and configuration endpoints
 ├── frontend/
 │   ├── src/
-│   │   ├── App.jsx             # Router setup
+│   │   ├── App.jsx                 # Client-side routing
 │   │   ├── components/
-│   │   │   └── Layout.jsx      # Sidebar + shell
+│   │   │   └── Layout.jsx          # Sidebar navigation and shell
 │   │   ├── pages/
 │   │   │   ├── DashboardPage.jsx
 │   │   │   ├── MarketIntelPage.jsx
@@ -258,36 +267,20 @@ nerveos/
 │   │   │   ├── ActionsPage.jsx
 │   │   │   └── SettingsPage.jsx
 │   │   ├── lib/
-│   │   │   └── api.js          # API client
+│   │   │   └── api.js              # API client
 │   │   └── hooks/
-│   │       └── useApi.js       # React hook
+│   │       └── useApi.js           # React data-fetching hook
 │   └── Dockerfile
 └── searxng/
-    └── settings.yml            # SearXNG config
+    └── settings.yml                # SearXNG configuration
 ```
 
 ---
 
-## 🎯 AMD Slingshot — Pitch
+## License
 
-**One-liner:** *"An AI business OS that continuously watches your market, inbox, and metrics — then drafts the decisions for you."*
-
-**Persona:** 10–200 person B2B startup founder / COO
-
-**Day without NerveOS:** 15 tabs, 8 tools, no clear picture  
-**Day with NerveOS:** Wake up to one command center — "Here's what changed, here's what we should do."
-
-**Differentiator:** Multi-agent cross-system orchestration + fully self-hostable + privacy-first (local LLM + private search) — there are very few truly open, self-hostable "AI business OS" products.
+MIT License. Free to use, modify, and self-host. See [LICENSE](LICENSE) for details.
 
 ---
 
-## 📄 License
-
-MIT — free to use, modify, and self-host.
-
----
-
-<div align="center">
-  <b>Built with ❤️ for the AMD Slingshot Hackathon</b><br/>
-  <sub>Future of Work & Productivity Track</sub>
-</div>
+Built for the AMD Slingshot Hackathon — Future of Work and Productivity Track.

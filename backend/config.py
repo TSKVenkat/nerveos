@@ -17,12 +17,10 @@ class Settings(BaseSettings):
     # ── Database ─────────────────────────────────────────
     DATABASE_URL: str = "sqlite+aiosqlite:///./nerveos.db"
 
-    # ── LLM / Ollama ────────────────────────────────────
-    OLLAMA_BASE_URL: str = "http://localhost:11434"
-    OLLAMA_MODEL: str = "llama3.2"
-    # Optional OpenAI-compatible fallback
-    OPENAI_API_KEY: Optional[str] = None
-    OPENAI_MODEL: str = "gpt-4o-mini"
+    # ── LLM / OpenRouter (Grok) ─────────────────────────
+    OPENROUTER_API_KEY: str = ""
+    OPENROUTER_MODEL: str = "x-ai/grok-3-mini-beta"
+    OPENROUTER_BASE_URL: str = "https://openrouter.ai/api/v1"
 
     # ── SearXNG ──────────────────────────────────────────
     SEARXNG_URL: str = "http://localhost:8888"

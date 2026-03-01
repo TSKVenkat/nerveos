@@ -1,85 +1,60 @@
-"""LLM service — Ollama (local) with optional OpenAI fallback."""
+"""LLM service — Grok via OpenRouter."""
 
 import httpx
 from typing import Optional
 from loguru import logger
 from config import settings
 
-try:
-    import ollama as ollama_lib
-    OLLAMA_AVAILABLE = True
-except ImportError:
-    OLLAMA_AVAILABLE = False
-
 
 class LLMService:
-    """Unified LLM interface: tries Ollama first, falls back to OpenAI-compatible."""
+    """LLM interface using Grok (x-ai) through OpenRouter."""
 
     def __init__(self):
-        self.ollama_url = settings.OLLAMA_BASE_URL
-        self.ollama_model = settings.OLLAMA_MODEL
-        self.openai_key = settings.OPENAI_API_KEY
-        self.openai_model = settings.OPENAI_MODEL
+        self.api_key = settings.OPENROUTER_API_KEY
+        self.model = settings.OPENROUTER_MODEL
+        self.base_url = settings.OPENROUTER_BASE_URL.rstrip("/")
 
     async def generate(self, prompt: str, system: str = "", temperature: float = 0.3, max_tokens: int = 2000) -> str:
-        """Generate text from LLM."""
-        # Try Ollama first
-        result = await self._ollama_generate(prompt, system, temperature)
+        """Generate text from Grok via OpenRouter."""
+        if not self.api_key:
+            return "[LLM unavailable — set OPENROUTER_API_KEY in .env]"
+
+        result = await self._openrouter_generate(prompt, system, temperature, max_tokens)
         if result:
             return result
 
-        # Fallback to OpenAI
-        if self.openai_key:
-            result = await self._openai_generate(prompt, system, temperature, max_tokens)
-            if result:
-                return result
+        return "[LLM request failed — check OpenRouter key and quota]"
 
-        return "[LLM unavailable — configure Ollama or OpenAI]"
-
-    async def _ollama_generate(self, prompt: str, system: str, temperature: float) -> Optional[str]:
+    async def _openrouter_generate(self, prompt: str, system: str, temperature: float, max_tokens: int) -> Optional[str]:
+        """Call OpenRouter chat completions (OpenAI-compatible)."""
         try:
             async with httpx.AsyncClient(timeout=120) as client:
-                payload = {
-                    "model": self.ollama_model,
-                    "prompt": prompt,
-                    "stream": False,
-                    "options": {"temperature": temperature},
-                }
-                if system:
-                    payload["system"] = system
-
-                resp = await client.post(f"{self.ollama_url}/api/generate", json=payload)
-                if resp.status_code == 200:
-                    data = resp.json()
-                    return data.get("response", "")
-        except httpx.ConnectError:
-            logger.debug("Ollama not reachable")
-        except Exception as e:
-            logger.error("Ollama error: {}", e)
-        return None
-
-    async def _openai_generate(self, prompt: str, system: str, temperature: float, max_tokens: int) -> Optional[str]:
-        try:
-            async with httpx.AsyncClient(timeout=60) as client:
                 messages = []
                 if system:
                     messages.append({"role": "system", "content": system})
                 messages.append({"role": "user", "content": prompt})
 
                 resp = await client.post(
-                    "https://api.openai.com/v1/chat/completions",
-                    headers={"Authorization": f"Bearer {self.openai_key}"},
+                    f"{self.base_url}/chat/completions",
+                    headers={
+                        "Authorization": f"Bearer {self.api_key}",
+                        "HTTP-Referer": "https://nerveos.app",
+                        "X-Title": "NerveOS",
+                    },
                     json={
-                        "model": self.openai_model,
+                        "model": self.model,
                         "messages": messages,
                         "temperature": temperature,
                         "max_tokens": max_tokens,
                     },
                 )
                 if resp.status_code == 200:
-                    return resp.json()["choices"][0]["message"]["content"]
+                    data = resp.json()
+                    return data["choices"][0]["message"]["content"]
+                else:
+                    logger.error("OpenRouter {}: {}", resp.status_code, resp.text[:300])
         except Exception as e:
-            logger.error("OpenAI error: {}", e)
+            logger.error("OpenRouter/Grok error: {}", e)
         return None
 
     async def classify(self, text: str, categories: list[str]) -> str:

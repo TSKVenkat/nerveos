@@ -26,8 +26,9 @@ services:
       - "8000:8000"
     environment:
       - DATABASE_URL=sqlite+aiosqlite:///./nerveos.db
-      - OLLAMA_BASE_URL=http://ollama:11434
-      - OLLAMA_MODEL=llama3.2
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - OPENROUTER_MODEL=x-ai/grok-3-mini-beta
+      - OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
       - SEARXNG_URL=http://searxng:8888
       - REDIS_URL=redis://redis:6379/0
       - DEBUG=true
@@ -68,24 +69,5 @@ services:
       - "6379:6379"
     restart: unless-stopped
 
-  # ── Ollama (Local LLM) ────────────────────────────
-  ollama:
-    image: ollama/ollama:latest
-    container_name: nerveos-ollama
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama-data:/root/.ollama
-    restart: unless-stopped
-    # Uncomment for GPU support:
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - driver: nvidia
-    #           count: all
-    #           capabilities: [gpu]
-
 volumes:
   backend-data:
-  ollama-data:
